@@ -21,3 +21,29 @@ MAP1 = [
 '       X  XXXX    XX  XXX   ',
 '    XXXX  XXXXXX  XX  XXXX C',
 'XXXXXXXX  XXXXXX  XX  XXXXXX']
+
+MAP2 = [
+'                            ',
+'                            ',
+'                            ',
+'       XXXX           XX    ',
+'                           ',
+'              XX         XX ',
+'            XX              ',
+'       X  XXXX    XX  XX    ',
+'       X  XXXX    XX  XXX   ',
+' P  XXXX  XXXXXX  XX  XXXX C',
+'XXXXXXXX  XXXXXX  XX  XXXXXX']
+
+MAP3 = [
+'                            ',
+'                            ',
+'                            ',
+'       XXXX           XX    ',
+'                           ',
+'              XX         XX ',
+'            XX              ',
+'          XXXX    XX  XX    ',
+'                  XX  XXX   ',
+' P          XXXX  XX  XXXX C',
+'XXXXXXXX  XXXXXX  XX  XXXXXX']

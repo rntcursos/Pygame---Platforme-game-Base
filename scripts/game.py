@@ -4,26 +4,57 @@ from scripts.fade import Fade
 from scripts.obj import Obj
 from scripts.player import Player
 from scripts.settings import *
+from scripts.ui import Ui
+
 
 class Game:
 
     def __init__(self):
+        self.maps = [MAP1, MAP2, MAP3]
+        self.active = True
+        self.current_level = 0
+        self.level = Level(self.maps[self.current_level])
+       
+    def events(self,event):
+        self.level.events(event)
+
+    def draw(self):
+        self.level.draw()
+
+    def level_manager(self):
+        if self.level.active_level == False and self.level.gameover == False:
+            self.current_level += 1
+            self.level = Level(self.maps[self.current_level])
+        elif self.level.active_level == True and self.level.gameover == True:
+            self.active = False
+
+    def update(self):
+        self.level_manager()
+        self.level.update()
+
+class Level:
+
+    def __init__(self, worldmap):
 
         self.display = pygame.display.get_surface()
         self.all_sprites = Camera()
         self.colision_sprites = pygame.sprite.Group()
 
-        self.active = True
+        self.active_level = True
+        self.gameover = False
+
         self.fade = Fade(5)
         self.finish = Obj("assets/title/finish.png",[0,0], [self.all_sprites])
         self.player = Player([100,128], [self.all_sprites], self.colision_sprites)
-        self.generate_map()
 
+        self.worldmap = worldmap
+        self.generate_map()
+    
         self.hud_ui = Ui()
 
     def generate_map(self):
 
-        for row_index, row in enumerate(MAP1):
+        for row_index, row in enumerate(self.worldmap):
             for col_index, col in enumerate(row):
                 x = col_index * TILE_SIZE
                 y = row_index * TILE_SIZE
@@ -42,7 +73,7 @@ class Game:
     
     def next_stage(self):
         if self.player.rect.colliderect(self.finish.rect):
-            self.active = False
+            self.active_level = False
 
     def reset_position(self):
         if self.player.rect.y > HEIGHT:
@@ -51,7 +82,7 @@ class Game:
             self.hud_ui.lifes -= 1
         
         if self.hud_ui.lifes <= 0:
-            self.active = False
+            self.gameover = True
 
     def draw(self):
         self.all_sprites.costum_draw(self.player)
@@ -64,32 +95,8 @@ class Game:
         self.reset_position()
         self.hud_ui.update()
 
-class Ui:
 
-    def __init__(self):
-        
-        self.display = pygame.display.get_surface()
-        self.ui_group = pygame.sprite.Group()
 
-        self.hud1 = Obj("assets/player/idle_0.png", [0,10],[self.ui_group])
-        self.hud2 = Obj("assets/player/idle_0.png", [74,10],[self.ui_group])
-        self.hud3 = Obj("assets/player/idle_0.png", [144,10],[self.ui_group])
-
-        self.lifes = 3
-    
-    def count_lifes(self):
-        if self.lifes == 2:
-            self.hud3.kill()
-        elif self.lifes == 1:
-            self.hud2.kill()
-        elif self.lifes == 0:
-            self.hud1.kill()
-
-    def draw(self):
-        self.ui_group.draw(self.display)
-    
-    def update(self):
-        self.count_lifes()
     
 
 
